@@ -75,6 +75,35 @@ describe "Market" do
       market.must_respond_to :zip
       market.zip.must_equal zip
     end
+  end
 
+  describe "all" do
+    it "returns an array" do
+      markets = FarMar::Market.all
+      markets.must_be_kind_of Array
+    end
+
+    it "returns a collection full of Markets" do
+      markets = FarMar::Market.all
+
+      markets.each do |market|
+        market.must_be_kind_of FarMar::Market
+      end
+    end
+
+    it "returns the correct number of Markets" do
+      markets = FarMar::Market.all
+      markets.length.must_equal 500
+    end
+
+    it "Gets the first Market from the file" do
+      markets = FarMar::Market.all
+      markets.first.id.must_equal 1
+    end
+
+    it "Gets the last Market from the file" do
+      markets = FarMar::Market.all
+      markets.last.id.must_equal 500
+    end
   end
 end

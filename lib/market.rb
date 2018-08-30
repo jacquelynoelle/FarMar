@@ -23,25 +23,11 @@ module FarMar
     # self.all: returns a collection of instances, representing all of the
     # objects described in the CSV
     def self.all
-      # add headers
-      all_markets = CSV.open('support/markets.csv','r+', :write_headers => true,
-        :headers => @@column_headers).each do |line|
-        # convert CSV::Row objects to hash
-        market_hash = line.to_h
-        # create a new Market object using values from the hash
-        FarMar::Market.new(
-          market_hash[:id],
-          market_hash[:name],
-          market_hash[:address],
-          market_hash[:city],
-          market_hash[:county],
-          market_hash[:state],
-          market_hash[:zip]
-        )
-        # market object is stored in current index of all_markets
+      markets = []
+      CSV.read('support/markets.csv').each do |line|
+        markets << Market.new(line[0].to_i, line[1], line[2], line[3], line[4], line[5], line[6])
       end
-      @@column_headers = nil # set to nil after first header insertion
-      return all_markets
+      return markets
     end
 
     # self.find(id): returns an instance of the object where the value of the
