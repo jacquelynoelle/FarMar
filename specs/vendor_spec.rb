@@ -14,15 +14,10 @@ describe "Vendor" do
       vendor.id.must_equal id
     end
 
-    it "requires an integer for ID, number of employees, and market ID" do
+    it "requires an integer for ID and market ID" do
       # ID must be an integer
       expect{
         FarMar::Vendor.new("not an integer", "test", 3, 1)
-      }.must_raise ArgumentError
-
-      # number of employees must be an integer
-      expect{
-        FarMar::Vendor.new(1, "test", "not an integer", 1)
       }.must_raise ArgumentError
 
       # market id must be an integer
@@ -31,15 +26,10 @@ describe "Vendor" do
       }.must_raise ArgumentError
     end
 
-    it "requires a positive ID, number of employees, and market ID" do
+    it "requires a positive ID and market ID" do
       # ID must be positive
       expect{
         FarMar::Vendor.new(-10, "test", 3, 1)
-      }.must_raise ArgumentError
-
-      # number of employees must be positive
-      expect{
-        FarMar::Vendor.new(1, "test", -10, 1)
       }.must_raise ArgumentError
 
       # market id must be positive

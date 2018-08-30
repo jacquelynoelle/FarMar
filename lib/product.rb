@@ -1,3 +1,5 @@
+require 'csv'
+
 module FarMar
   class Product
     attr_reader :id, :name, :vendor_id
@@ -14,5 +16,41 @@ module FarMar
       @name = name
       @vendor_id = vendor_id
     end
+
+    # self.all: returns a collection of instances, representing all of the
+    # objects described in the CSV
+    def self.all
+
+    end
+
+    # self.find(id): returns an instance of the object where the value of the
+    # id field in the CSV matches the passed parameter.
+    def self.find(id)
+    end
+
+    # self.by_vendor(vendor_id): returns all of the products with the
+    # given vendor_id
+    def self.by_vendor(vendor_id)
+    end
+
+    # self.most_revenue(n) returns the top n product instances ranked by
+    # total revenue
+    def self.most_revenue(n)
+    end
+
+    # vendor: returns the FarMar::Vendor instance that is associated with this
+    # product using the FarMar::Product vendor_id field
+    def vendor
+    end
+
+    # sales: returns a collection of FarMar::Sale instances that are associated
+    # using the FarMar::Sale product_id field.
+    def sales
+    end
+
+    # number_of_sales: returns the number of times this product has been sold.
+    def number_of_sales
+    end
+
   end
 end
