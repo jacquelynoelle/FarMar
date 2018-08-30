@@ -16,6 +16,18 @@ describe "Market" do
       market.id.must_equal id
     end
 
+    it "requires an integer ID" do
+      expect{
+        FarMar::Market.new("not an integer", "test", "test", "test", "test", "test", "test")
+      }.must_raise ArgumentError
+    end
+
+    it "requires a positive ID" do
+      expect{
+        FarMar::Market.new(-10, "test", "test", "test", "test", "test", "test")
+      }.must_raise ArgumentError
+    end
+
     it "Keeps track of name" do
       name = "test"
       market = FarMar::Market.new(1, name,
