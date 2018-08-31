@@ -23,16 +23,15 @@ module FarMar
     # self.all: returns a collection of instances, representing all of the
     # objects described in the CSV
     def self.all
-      markets = []
-      CSV.read('support/markets.csv').each do |line|
-        markets << Market.new(line[0].to_i, line[1], line[2], line[3], line[4], line[5], line[6])
+      CSV.open('support/markets.csv').map do |line|
+        Market.new(line[0].to_i, line[1], line[2], line[3], line[4], line[5], line[6])
       end
-      return markets
     end
 
     # self.find(id): returns an instance of the object where the value of the
     # id field in the CSV matches the passed parameter.
     def self.find(id)
+      all.select { |market| market.id == id }.first
     end
 
     # vendors: returns a collection of FarMar::Vendor instances that are
