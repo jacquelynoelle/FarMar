@@ -58,6 +58,56 @@ describe "Vendor" do
       vendor.must_respond_to :market_id
       vendor.market_id.must_equal market_id
     end
+  end
 
+  describe "all" do
+    it "returns an array" do
+      vendors = FarMar::Vendor.all
+      vendors.must_be_kind_of Array
+    end
+
+    it "returns a collection full of Vendors" do
+      vendors = FarMar::Vendor.all
+
+      vendors.each do |vendor|
+        vendor.must_be_kind_of FarMar::Vendor
+      end
+    end
+
+    it "returns the correct number of Vendors" do
+      vendors = FarMar::Vendor.all
+      vendors.length.must_equal 2690
+    end
+
+    it "Gets the first Vendor from the file" do
+      vendors = FarMar::Vendor.all
+      vendors.first.id.must_equal 1
+    end
+
+    it "Gets the last Vendor from the file" do
+      vendors = FarMar::Vendor.all
+      vendors.last.id.must_equal 2690
+    end
+  end
+
+  describe "find" do
+    it "Returns nil if the vendor does not exist" do
+      vendor = FarMar::Vendor.find(12345)
+      vendor.must_be_nil
+    end
+
+    it "Finds the first vendor" do
+      id = 1
+      vendor = FarMar::Vendor.find(id)
+      vendor.must_be_kind_of FarMar::Vendor
+      vendor.id.must_equal id
+    end
+
+    it "Finds the last vendor" do
+      id = 1893
+      vendor = FarMar::Vendor.find(id)
+      vendor.must_be_kind_of FarMar::Vendor
+      vendor.id.must_equal id
+    end
   end
 end
