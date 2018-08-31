@@ -51,6 +51,56 @@ describe "Product" do
       product.must_respond_to :vendor_id
       product.vendor_id.must_equal vendor_id
     end
+  end
 
+  describe "all" do
+    it "returns an array" do
+      products = FarMar::Product.all
+      products.must_be_kind_of Array
+    end
+
+    it "returns a collection full of Products" do
+      products = FarMar::Product.all
+
+      products.each do |product|
+        product.must_be_kind_of FarMar::Product
+      end
+    end
+
+    it "returns the correct number of Products" do
+      products = FarMar::Product.all
+      products.length.must_equal 8193
+    end
+
+    it "Gets the first Product from the file" do
+      products = FarMar::Product.all
+      products.first.id.must_equal 1
+    end
+
+    it "Gets the last Product from the file" do
+      products = FarMar::Product.all
+      products.last.id.must_equal 8193
+    end
+  end
+
+  describe "find" do
+    it "Returns nil if the product does not exist" do
+      product = FarMar::Product.find(12345)
+      product.must_be_nil
+    end
+
+    it "Finds the first product" do
+      id = 1
+      product = FarMar::Product.find(id)
+      product.must_be_kind_of FarMar::Product
+      product.id.must_equal id
+    end
+
+    it "Finds the last product" do
+      id = 1893
+      product = FarMar::Product.find(id)
+      product.must_be_kind_of FarMar::Product
+      product.id.must_equal id
+    end
   end
 end
