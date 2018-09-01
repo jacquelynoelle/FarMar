@@ -60,7 +60,7 @@ describe "Vendor" do
     end
   end
 
-  describe "all" do
+  describe "self.all" do
     it "returns an array" do
       vendors = FarMar::Vendor.all
       vendors.must_be_kind_of Array
@@ -90,7 +90,7 @@ describe "Vendor" do
     end
   end
 
-  describe "find" do
+  describe "self.find" do
     it "Returns nil if the vendor does not exist" do
       vendor = FarMar::Vendor.find(12345)
       vendor.must_be_nil
@@ -108,6 +108,40 @@ describe "Vendor" do
       vendor = FarMar::Vendor.find(id)
       vendor.must_be_kind_of FarMar::Vendor
       vendor.id.must_equal id
+    end
+  end
+
+  describe "Vendor#product" do
+    it "returns an empty array if no products match" do
+      vendor = FarMar::Vendor.new(999999, "test vendor", 10, 10)
+
+      products = vendor.products
+      products.must_be_kind_of Array
+      products.must_be_empty
+    end
+
+    it "Returns an array with one product if one product matches" do
+      vendor_id = 3
+      vendor = FarMar::Vendor.new(vendor_id, "test vendor", 10, 10)
+      products = vendor.products
+      products.length.must_equal 1
+
+      products.each do |product|
+        product.must_be_kind_of FarMar::Product
+        product.vendor_id.must_equal vendor_id
+      end
+    end
+
+    it "returns an array with many products if many match" do
+      vendor_id = 4
+      vendor = FarMar::Vendor.new(vendor_id, "test vendor", 10, 10)
+      products = vendor.products
+      products.length.must_equal 3
+
+      products.each do |product|
+        product.must_be_kind_of FarMar::Product
+        product.vendor_id.must_equal vendor_id
+      end
     end
   end
 end

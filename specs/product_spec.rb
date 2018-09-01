@@ -1,7 +1,7 @@
 require_relative 'spec_helper.rb'
 
 describe "Product" do
-  describe "#initialize" do
+  describe "Product#initialize" do
     it "Creates an instance of product" do
       product = FarMar::Product.new(1, "A Product", 1)
       product.must_be_kind_of FarMar::Product
@@ -53,7 +53,26 @@ describe "Product" do
     end
   end
 
-  describe "all" do
+  describe "Product#vendor" do
+    it "Returns an instance of Vendor with the correct id" do
+      product = FarMar::Product.new(1337, "test product", 10)
+      vendor = product.vendor
+      vendor.must_be_kind_of FarMar::Vendor
+      vendor.id.must_equal product.vendor_id
+    end
+
+    it "Returns nil when the vendor_id doesn't correspond to a real vendor" do
+      # Assumption: there is no vendor 12345
+      vendor_id = 12345
+      FarMar::Vendor.find(vendor_id).must_be_nil "Whoops, didn't expect vendor #{vendor_id} to exist, which invalidates the test"
+
+      product = FarMar::Product.new(1337, "test product", vendor_id)
+      vendor = product.vendor
+      vendor.must_be_nil
+    end
+  end
+
+  describe "Product#self.all" do
     it "returns an array" do
       products = FarMar::Product.all
       products.must_be_kind_of Array
@@ -83,7 +102,7 @@ describe "Product" do
     end
   end
 
-  describe "find" do
+  describe "Product#self.find" do
     it "Returns nil if the product does not exist" do
       product = FarMar::Product.find(12345)
       product.must_be_nil
@@ -101,6 +120,44 @@ describe "Product" do
       product = FarMar::Product.find(id)
       product.must_be_kind_of FarMar::Product
       product.id.must_equal id
+    end
+  end
+
+  describe "find_by_vendor" do
+    it "does something if the vendor id is invalid" do
+      vendor_id = "not an id"
+      vendor_id = 999999
+      products = FarMar::Product.find_by_vendor(vendor_id)
+      products.must_be_empty
+    end
+
+    it "returns an empty array if no products match" do
+      # Assumption: no products have vendor id 999999
+      vendor_id = 999999
+      products = FarMar::Product.find_by_vendor(vendor_id)
+      products.must_be_empty
+    end
+
+    it "returns an array of one Product if one product matches" do
+      vendor_id = 3
+      products = FarMar::Product.find_by_vendor(vendor_id)
+      products.length.must_equal 1
+
+      products.each do |product|
+        product.must_be_kind_of FarMar::Product
+        product.vendor_id.must_equal vendor_id
+      end
+    end
+
+    it "return sn array of many Products if many products match" do
+      vendor_id = 4
+      products = FarMar::Product.find_by_vendor(vendor_id)
+      products.length.must_equal 3
+
+      products.each do |product|
+        product.must_be_kind_of FarMar::Product
+        product.vendor_id.must_equal vendor_id
+      end
     end
   end
 end

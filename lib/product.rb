@@ -31,9 +31,10 @@ module FarMar
       all.select { |product| product.id == id }.first
     end
 
-    # self.by_vendor(vendor_id): returns all of the products with the
+    # self.find_by_vendor(vendor_id): returns all of the products with the
     # given vendor_id
-    def self.by_vendor(vendor_id)
+    def self.find_by_vendor(vendor_id)
+      all.select { |product| product.vendor_id == vendor_id }
     end
 
     # self.most_revenue(n) returns the top n product instances ranked by
@@ -44,6 +45,7 @@ module FarMar
     # vendor: returns the FarMar::Vendor instance that is associated with this
     # product using the FarMar::Product vendor_id field
     def vendor
+      return Vendor.find(vendor_id)
     end
 
     # sales: returns a collection of FarMar::Sale instances that are associated
