@@ -1,35 +1,26 @@
 require 'csv'
+require_relative 'loadable'
 
 module FarMar
-  class Vendor
-    attr_reader :id, :name, :employees, :market_id
+  class Vendor < Loadable
+    attr_reader :name, :employees, :market_id
     def initialize(id, name, employees, market_id)
-      unless id.instance_of?(Integer) && id > 0
-        raise ArgumentError.new("ID must be a positive integer (got #{id})")
-      end
-
       unless market_id.instance_of?(Integer) && market_id > 0
         raise ArgumentError.new("Market ID must be a positive integer (got #{market_id})")
       end
 
-      @id = id
+      super(id)
       @name = name
       @employees = employees
       @market_id = market_id
     end
 
-    # self.all: returns a collection of instances, representing all of the
-    # objects described in the CSV
-    def self.all
-      CSV.open('support/vendors.csv').map do |line|
-        Vendor.new(line[0].to_i, line[1], line[2], line[3].to_i)
-      end
+    def self.from_csv_line(line)
+      self.new(line[0].to_i, line[1], line[2], line[3].to_i)
     end
 
-    # self.find(id): returns an instance of the object where the value of the
-    # id field in the CSV matches the passed parameter.
-    def self.find(id)
-      all.select { |vendor| vendor.id == id }.first
+    def self.csv_filename
+      'support/vendors.csv'
     end
 
     # self.by_market(market_id): returns all of the vendors with the

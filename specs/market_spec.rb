@@ -127,4 +127,11 @@ describe "Market" do
       market.id.must_equal id
     end
   end
+
+  # describe "Market#vendors" do
+  #   id = 500
+  #   market = FarMar::Market.find(id)
+  #   market.vendors.length.must_equal 10
+  #   market.vendors.first must_be_kind_of FarMar::Vendor
+  # end
 end

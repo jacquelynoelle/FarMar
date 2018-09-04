@@ -1,17 +1,14 @@
 require 'csv'
+require_relative 'loadable'
 
 module FarMar
-  class Market
-    attr_reader :id, :name, :address, :city, :county, :state, :zip
+  class Market < Loadable
+    attr_reader :name, :address, :city, :county, :state, :zip
 
     @@column_headers = [:id, :name, :address, :city, :county, :state, :zip]
 
     def initialize(id, name, address, city, county, state, zip)
-      unless id.instance_of?(Integer) && id > 0
-        raise ArgumentError.new("ID must be a positive integer (got #{id})")
-      end
-
-      @id = id
+      super(id)
       @name = name
       @address = address
       @city = city
@@ -20,23 +17,18 @@ module FarMar
       @zip = zip
     end
 
-    # self.all: returns a collection of instances, representing all of the
-    # objects described in the CSV
-    def self.all
-      CSV.open('support/markets.csv').map do |line|
-        Market.new(line[0].to_i, line[1], line[2], line[3], line[4], line[5], line[6])
-      end
+    def self.from_csv_line(line)
+      self.new(line[0].to_i, line[1], line[2], line[3], line[4], line[5], line[6])
     end
 
-    # self.find(id): returns an instance of the object where the value of the
-    # id field in the CSV matches the passed parameter.
-    def self.find(id)
-      all.select { |market| market.id == id }.first
+    def self.csv_filename
+      'support/markets.csv'
     end
 
     # vendors: returns a collection of FarMar::Vendor instances that are
     # associated with the market by the market_id field.
     def vendors
+      # return Vendor.all.select { |vendor| vendor.market_id == id }
     end
 
     # self.search(search_term) returns a collection of FarMar::Market instances
@@ -49,6 +41,7 @@ module FarMar
     # products returns a collection of FarMar::Product instances that are
     # associated to the market through the FarMar::Vendor class.
     def products
+      return Product.all.select { |product| vendors.include? product.vendor }
     end
 
     # prefered_vendor: returns the vendor with the highest revenue
